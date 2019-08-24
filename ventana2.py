@@ -2,7 +2,8 @@ import pymysql
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Dialog(object):
-    def setupUi(self, Dialog):
+    def setupUi(self, Dialog, accion):
+        print(accion)
         Dialog.setObjectName("Dialog")
         Dialog.resize(400, 214)
         
@@ -56,6 +57,9 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
+
+        """Comprobaciones de operaciones"""
+        
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate

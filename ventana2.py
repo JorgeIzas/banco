@@ -2,15 +2,15 @@ import pymysql
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 cursor = None
+cuenta = ''
+dinero = ''
+NoCuenta = ''
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog, accion, c):
         Dialog.setObjectName("Dialog")
         Dialog.resize(400, 214)
         global cursor
-        global dinero
-        global NoCuenta
-        NoCuenta = ""
         cursor = c
         #comboBox de las cuentras creadas
         self.cBox2 = QtWidgets.QComboBox(Dialog)
@@ -72,6 +72,7 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
         """ Quitar elementos extra """
+        global dinero
         if accion == 'consulta':
             self.txtMonto.setVisible(False)
             self.label_2.setVisible(False)
@@ -108,6 +109,8 @@ class Ui_Dialog(object):
         self.NoCuenta = data[0]
         prim = str(data).split('(')
         seg = prim[1].split(',')
+        global cuenta
+        cuenta = seg[0]
         statement1 = 'SELECT cuenta FROM cuenta where id = ' + seg[0]
         cursor.execute(statement1)
         data = cursor.fetchone()
@@ -118,23 +121,28 @@ class Ui_Dialog(object):
         self.txtSaldo.setText(str(data[0]))
         
     def aumentar(self):
+        global dinero
+        dinero = self.txtMonto.toPlainText()
         self.txtSaldo.setText('')
         self.txtMonto.setText('')
-        sql = """update cuenta set saldo = saldo + %s  where id = %s""" %(dinero, self.NoCuenta)
+        sql = 'update cuenta set saldo = (saldo + ' + str(dinero) + ')  where cuenta = ' + str(self.NoCuenta) +';'
+        print(sql)
         cursor.execute(sql)
         cursor.fetchone
-        sql = "select saldo from cuenta where id = '" + self.NoCuenta + "';"
+        sql = "select saldo from cuenta where id = '" + str(self.NoCuenta) + "';"
         cursor.execute(sql)
         data = cursor.fetchone()
         self.txtSaldo.setText(str(data[0]))
         
     def disminuir(self):
+        global dinero
+        dinero = self.txtMonto.toPlainText()
         self.txtSaldo.setText('')
         self.txtMonto.setText('')
-        sql = """update cuenta set saldo = (saldo - %s ) where id = %s""" %(dinero, self.NoCuenta)
+        sql = 'update cuenta set saldo = (saldo - ' + str(dinero) + ')  where cuenta = ' + str(self.NoCuenta) +';'
         cursor.execute(sql)
         cursor.fetchone()
-        sql = "select saldo from cuenta where id = '" + self.NoCuenta + "';"
+        sql = "select saldo from cuenta where cuenta = '" + str(self.NoCuenta) + "';"
         cursor.execute(sql)
         data = cursor.fetchone()
         self.txtSaldo.setText(str(data[0]))

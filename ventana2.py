@@ -1,19 +1,20 @@
 import pymysql
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+cursor = None
+
 class Ui_Dialog(object):
-    def setupUi(self, Dialog, accion):
+    def setupUi(self, Dialog, accion, c):
         Dialog.setObjectName("Dialog")
         Dialog.resize(400, 214)
-
+        global cursor
+        cursor = c
         #comboBox de las cuentras creadas
         self.cBox2 = QtWidgets.QComboBox(Dialog)
         self.cBox2.setGeometry(QtCore.QRect(10, 20, 151, 23))
         self.cBox2.setObjectName("cBox2")
         """ Cambiar datos de la cuenta """
         listaCuentas = []
-        db = pymysql.connect("localhost","root","rootPass.123","banco")
-        cursor = db.cursor()
         cursor.execute("SELECT cuenta, nombre FROM cuenta")
         data = cursor.fetchall()
         self.cBox2.addItem('----------')
@@ -85,8 +86,6 @@ class Ui_Dialog(object):
         primera = value.split(',')
         segunda = primera[0].split("'")
         print('Cambio', segunda[1])
-        db = pymysql.connect("localhost","root","rootPass.123","banco")
-        cursor = db.cursor()
         sql = "SELECT id FROM cuenta WHERE cuenta = '" + segunda[1] + "'"
         cursor.execute(sql)
         data = cursor.fetchone()
@@ -100,17 +99,3 @@ class Ui_Dialog(object):
         cursor.execute(statement1)
         data = cursor.fetchone()
         self.txtSaldo.setText(str(data[0]))
-        
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        

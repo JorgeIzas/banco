@@ -3,7 +3,8 @@ from ventana2 import Ui_Dialog
 from PyQt5.QtWidgets import QApplication, QMainWindow
 import pymysql
 
-
+db = pymysql.connect("localhost","root","rootPass.123","banco")
+cursor = db.cursor()
 accion = 'prueba'
 
 class Ui_mainWindow(object):
@@ -68,8 +69,6 @@ class Ui_mainWindow(object):
         self.btnCajero.setText(_translate("mainWindow", "Cajero"))
         
     def nivelAislamiento(self):
-        db = pymysql.connect("localhost","root","rootPass.123","banco")
-        cursor = db.cursor()
         var = str(self.cBox.currentText())
         if var == 'Lectura no Confirmada':
             sql = "set transaction isolation level READ UNCOMMITTED;"
@@ -88,7 +87,7 @@ class Ui_mainWindow(object):
             cursor.fetchone()
             print(var)
         elif var == 'Lectura Repetible':
-            sql = "set transaction isolation level REPEATABLE-READ;"
+            sql = "set transaction isolation level REPEATABLE READ;"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"
@@ -109,7 +108,7 @@ class Ui_mainWindow(object):
         accion = 'consulta'
         self.window = QMainWindow()
         self.ui = Ui_Dialog()
-        self.ui.setupUi(self.window, accion)
+        self.ui.setupUi(self.window, accion, cursor)
         self.ui
         self.window.show()
     
@@ -118,7 +117,7 @@ class Ui_mainWindow(object):
         accion = 'deposito'
         self.window = QMainWindow()
         self.ui = Ui_Dialog()
-        self.ui.setupUi(self.window, accion)
+        self.ui.setupUi(self.window, accion, cursor)
         self.ui
         self.window.show()
     
@@ -127,7 +126,7 @@ class Ui_mainWindow(object):
         accion = 'retiro'
         self.window = QMainWindow()
         self.ui = Ui_Dialog()
-        self.ui.setupUi(self.window, accion)
+        self.ui.setupUi(self.window, accion, cursor)
         self.ui
         self.window.show()
     
@@ -136,6 +135,6 @@ class Ui_mainWindow(object):
         accion = 'cajero'
         self.window = QMainWindow()
         self.ui = Ui_Dialog()
-        self.ui.setupUi(self.window, accion)
+        self.ui.setupUi(self.window, accion, cursor)
         self.ui
         self.window.show()

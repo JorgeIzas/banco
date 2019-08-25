@@ -8,6 +8,9 @@ class Ui_Dialog(object):
         Dialog.setObjectName("Dialog")
         Dialog.resize(400, 214)
         global cursor
+        global dinero
+        global NoCuenta
+        NoCuenta = ""
         cursor = c
         #comboBox de las cuentras creadas
         self.cBox2 = QtWidgets.QComboBox(Dialog)
@@ -52,6 +55,7 @@ class Ui_Dialog(object):
         self.btnCancelar = QtWidgets.QPushButton(Dialog)
         self.btnCancelar.setGeometry(QtCore.QRect(10, 180, 80, 23))
         self.btnCancelar.setObjectName("btnCancelar")
+        self.btnCancelar.clicked.connect(self.rollback)
         
         #boton solo para realizar la operacion
         self.btnRealizar = QtWidgets.QPushButton(Dialog)
@@ -62,6 +66,7 @@ class Ui_Dialog(object):
         self.btnAceptar = QtWidgets.QPushButton(Dialog)
         self.btnAceptar.setGeometry(QtCore.QRect(100, 180, 80, 23))
         self.btnAceptar.setObjectName("btnAceptar")
+        self.btnAceptar.clicked.connect(self.commit)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -70,6 +75,17 @@ class Ui_Dialog(object):
         if accion == 'consulta':
             self.txtMonto.setVisible(False)
             self.label_2.setVisible(False)
+            self.btnRealizar.setVisible(False)
+        elif accion == 'deposito':
+            dinero = self.txtMonto.toPlainText()
+            self.btnRealizar.clicked.connect(self.aumentar)
+        elif accion == 'retiro':
+            dinero = self.txtMonto.toPlainText()
+            self.btnRealizar.clicked.connect(self.disminuir)
+        elif accion == 'cajero':
+            dinero = self.txtMonto.toPlainText()
+            self.btnRealizar.clicked.connect(self.disminuir)
+                     
     
     """Comprobaciones de operaciones"""
 
@@ -89,6 +105,7 @@ class Ui_Dialog(object):
         sql = "SELECT id FROM cuenta WHERE cuenta = '" + segunda[1] + "'"
         cursor.execute(sql)
         data = cursor.fetchone()
+        self.NoCuenta = data[0]
         prim = str(data).split('(')
         seg = prim[1].split(',')
         statement1 = 'SELECT cuenta FROM cuenta where id = ' + seg[0]
@@ -99,3 +116,35 @@ class Ui_Dialog(object):
         cursor.execute(statement1)
         data = cursor.fetchone()
         self.txtSaldo.setText(str(data[0]))
+        
+    def aumentar(self):
+        self.txtSaldo.setText('')
+        self.txtMonto.setText('')
+        sql = """update cuenta set saldo = saldo + %s  where id = %s""" %(dinero, self.NoCuenta)
+        cursor.execute(sql)
+        cursor.fetchone
+        sql = "select saldo from cuenta where id = '" + self.NoCuenta + "';"
+        cursor.execute(sql)
+        data = cursor.fetchone()
+        self.txtSaldo.setText(str(data[0]))
+        
+    def disminuir(self):
+        self.txtSaldo.setText('')
+        self.txtMonto.setText('')
+        sql = """update cuenta set saldo = (saldo - %s ) where id = %s""" %(dinero, self.NoCuenta)
+        cursor.execute(sql)
+        cursor.fetchone()
+        sql = "select saldo from cuenta where id = '" + self.NoCuenta + "';"
+        cursor.execute(sql)
+        data = cursor.fetchone()
+        self.txtSaldo.setText(str(data[0]))
+        
+    def commit(self):
+        sql = "commit;"
+        cursor.execute(sql)
+        
+    def rollback(self):
+        sql = "rollback;"
+        cursor.execute(sql)
+        
+        

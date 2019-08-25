@@ -68,11 +68,11 @@ class Ui_mainWindow(object):
         self.btnCajero.setText(_translate("mainWindow", "Cajero"))
         
     def nivelAislamiento(self):
-        db = pymysql.connect("localhost","root","gameBoy_444","banco")
+        db = pymysql.connect("localhost","root","rootPass.123","banco")
         cursor = db.cursor()
         var = str(self.cBox.currentText())
         if var == 'Lectura no Confirmada':
-            sql = "set @@session.tx_isolation = 'READ-UNCOMMITTED';"
+            sql = "set transaction isolation level READ UNCOMMITTED;"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"
@@ -80,7 +80,7 @@ class Ui_mainWindow(object):
             cursor.fetchone()
             print(var)
         elif var == 'Lectura Confirmada':
-            sql = "set @@session.tx_isolation = 'READ-COMMITTED';"
+            sql = "set transaction isolation level READ COMMITTED;"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"
@@ -88,7 +88,7 @@ class Ui_mainWindow(object):
             cursor.fetchone()
             print(var)
         elif var == 'Lectura Repetible':
-            sql = "set @@session.tx_isolation = 'REPEATABLE-READ';"
+            sql = "set transaction isolation level REPEATABLE-READ;"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"
@@ -96,7 +96,7 @@ class Ui_mainWindow(object):
             cursor.fetchone()
             print(var)
         elif var == 'Serializable':
-            sql = "set @@session.tx_isolation = 'SERIALIZABLE';"
+            sql = "set transaction isolation level SERIALIZABLE;"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"

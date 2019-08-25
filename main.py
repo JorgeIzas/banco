@@ -8,10 +8,11 @@ Created on Thu Aug 22 06:55:54 2019
 
 import sys
 import pymysql
+import mysql.connector
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from untitled import Ui_mainWindow
 
-db = pymysql.connect("localhost","root","rootPass.123","banco")
+db = pymysql.connect("localhost","root","gameBoy_444","banco")
 cursor = db.cursor()
 
 app = QApplication(sys.argv)

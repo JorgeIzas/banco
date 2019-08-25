@@ -1,6 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from ventana2 import Ui_Dialog
 from PyQt5.QtWidgets import QApplication, QMainWindow
+import pymysql
+
 
 accion = 'prueba'
 
@@ -16,29 +18,37 @@ class Ui_mainWindow(object):
         self.cBox.setGeometry(QtCore.QRect(10, 10, 79, 23))
         self.cBox.setEditable(False)
         self.cBox.setObjectName("cBox")
+        self.cBox.addItem("Lectura no Confirmada")
+        self.cBox.addItem("Lectura Confirmada")
+        self.cBox.addItem("Lectura Repetible")
+        self.cBox.addItem("Serializable")
         #Botonos de consultar
         self.btnConsultar = QtWidgets.QPushButton(self.centralwidget)
         self.btnConsultar.setGeometry(QtCore.QRect(70, 60, 80, 23))
         self.btnConsultar.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btnConsultar.setObjectName("btnConsultar")
+        self.btnConsultar.clicked.connect(self.nivelAislamiento)
         self.btnConsultar.clicked.connect(self.consulta)
         #boton depositar
         self.btnDeposito = QtWidgets.QPushButton(self.centralwidget)
         self.btnDeposito.setGeometry(QtCore.QRect(70, 100, 80, 23))
         self.btnDeposito.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btnDeposito.setObjectName("btnDeposito")
+        self.btnDeposito.clicked.connect(self.nivelAislamiento)
         self.btnDeposito.clicked.connect(self.deposito)
         #boton retirar
         self.btnRetiro = QtWidgets.QPushButton(self.centralwidget)
         self.btnRetiro.setGeometry(QtCore.QRect(70, 140, 80, 23))
         self.btnRetiro.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btnRetiro.setObjectName("btnRetiro")
+        self.btnRetiro.clicked.connect(self.nivelAislamiento)
         self.btnRetiro.clicked.connect(self.retiro)
         #boton cajero
         self.btnCajero = QtWidgets.QPushButton(self.centralwidget)
         self.btnCajero.setGeometry(QtCore.QRect(70, 180, 80, 23))
         self.btnCajero.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btnCajero.setObjectName("btnCajero")
+        self.btnCajero.clicked.connect(self.nivelAislamiento)
         self.btnCajero.clicked.connect(self.cajero)
 
         mainWindow.setCentralWidget(self.centralwidget)
@@ -56,6 +66,43 @@ class Ui_mainWindow(object):
         self.btnDeposito.setText(_translate("mainWindow", "Depósito"))
         self.btnRetiro.setText(_translate("mainWindow", "Retiro"))
         self.btnCajero.setText(_translate("mainWindow", "Cajero"))
+        
+    def nivelAislamiento(self):
+        db = pymysql.connect("localhost","root","gameBoy_444","banco")
+        cursor = db.cursor()
+        var = str(self.cBox.currentText())
+        if var == 'Lectura no Confirmada':
+            sql = "set @@session.tx_isolation = 'READ-UNCOMMITTED';"
+            cursor.execute(sql)
+            cursor.fetchone()
+            sql = "begin;"
+            cursor.execute(sql)
+            cursor.fetchone()
+            print(var)
+        elif var == 'Lectura Confirmada':
+            sql = "set @@session.tx_isolation = 'READ-COMMITTED';"
+            cursor.execute(sql)
+            cursor.fetchone()
+            sql = "begin;"
+            cursor.execute(sql)
+            cursor.fetchone()
+            print(var)
+        elif var == 'Lectura Repetible':
+            sql = "set @@session.tx_isolation = 'REPEATABLE-READ';"
+            cursor.execute(sql)
+            cursor.fetchone()
+            sql = "begin;"
+            cursor.execute(sql)
+            cursor.fetchone()
+            print(var)
+        elif var == 'Serializable':
+            sql = "set @@session.tx_isolation = 'SERIALIZABLE';"
+            cursor.execute(sql)
+            cursor.fetchone()
+            sql = "begin;"
+            cursor.execute(sql)
+            cursor.fetchone()
+        
     
     def consulta(self):
         global accion

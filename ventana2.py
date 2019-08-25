@@ -20,7 +20,7 @@ class Ui_Dialog(object):
         self.cBox2.setObjectName("cBox2")
         """ Cambiar datos de la cuenta """
         listaCuentas = []
-        db = pymysql.connect("localhost","root","rootPass.123","banco")
+        db = pymysql.connect("localhost","root","gameBoy_444","banco")
         cursor = db.cursor()
         cursor.execute("SELECT cuenta, nombre FROM cuenta")
         data = cursor.fetchall()
@@ -71,7 +71,7 @@ class Ui_Dialog(object):
         primera = value.split(',')
         segunda = primera[0].split("'")
         print('Cambio', segunda[1])
-        db = pymysql.connect("localhost","root","rootPass.123","banco")
+        db = pymysql.connect("localhost","root","gameBoy_444","banco")
         cursor = db.cursor()
         sql = "SELECT id FROM cuenta WHERE cuenta = '" + segunda[1] + "'"
         cursor.execute(sql)

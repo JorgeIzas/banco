@@ -102,7 +102,6 @@ class Ui_Dialog(object):
     def changeAccount(self, value):
         primera = value.split(',')
         segunda = primera[0].split("'")
-        print('Cambio', segunda[1])
         sql = "SELECT id FROM cuenta WHERE cuenta = '" + segunda[1] + "'"
         cursor.execute(sql)
         data = cursor.fetchone()
@@ -125,8 +124,7 @@ class Ui_Dialog(object):
         dinero = self.txtMonto.toPlainText()
         self.txtSaldo.setText('')
         self.txtMonto.setText('')
-        sql = 'update cuenta set saldo = (saldo + ' + str(dinero) + ')  where cuenta = ' + str(self.NoCuenta) +';'
-        print(sql)
+        sql = 'update cuenta set saldo = (saldo + ' + str(dinero) + ')  where id = ' + str(self.NoCuenta) +';'
         cursor.execute(sql)
         cursor.fetchone
         sql = "select saldo from cuenta where id = '" + str(self.NoCuenta) + "';"
@@ -139,10 +137,10 @@ class Ui_Dialog(object):
         dinero = self.txtMonto.toPlainText()
         self.txtSaldo.setText('')
         self.txtMonto.setText('')
-        sql = 'update cuenta set saldo = (saldo - ' + str(dinero) + ')  where cuenta = ' + str(self.NoCuenta) +';'
+        sql = 'update cuenta set saldo = (saldo - ' + str(dinero) + ')  where id = ' + str(self.NoCuenta) +';'
         cursor.execute(sql)
         cursor.fetchone()
-        sql = "select saldo from cuenta where cuenta = '" + str(self.NoCuenta) + "';"
+        sql = "select saldo from cuenta where id = '" + str(self.NoCuenta) + "';"
         cursor.execute(sql)
         data = cursor.fetchone()
         self.txtSaldo.setText(str(data[0]))
@@ -150,9 +148,9 @@ class Ui_Dialog(object):
     def commit(self):
         sql = "commit;"
         cursor.execute(sql)
+        print('Transacción ejecutada correctamente')
         
     def rollback(self):
         sql = "rollback;"
         cursor.execute(sql)
-        
-        
+        print('Transacción cancelada')

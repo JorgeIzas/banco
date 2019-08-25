@@ -5,14 +5,7 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog, accion):
         Dialog.setObjectName("Dialog")
         Dialog.resize(400, 214)
-        
-        #botones aceptar y cancelar
-        self.btnBox = QtWidgets.QDialogButtonBox(Dialog)
-        self.btnBox.setGeometry(QtCore.QRect(210, 180, 167, 24))
-        self.btnBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
-        self.btnBox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.btnBox.setObjectName("btnBox")
-        
+
         #comboBox de las cuentras creadas
         self.cBox2 = QtWidgets.QComboBox(Dialog)
         self.cBox2.setGeometry(QtCore.QRect(10, 20, 151, 23))

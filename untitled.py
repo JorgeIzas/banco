@@ -102,7 +102,7 @@ class Ui_mainWindow(object):
             sql = "begin;"
             cursor.execute(sql)
             cursor.fetchone()
-        
+            print(var)
     
     def consulta(self):
         global accion

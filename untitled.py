@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from ventana2 import Ui_Dialog
 from PyQt5.QtWidgets import QApplication, QMainWindow
 import pymysql
+import time
 
 db = pymysql.connect("localhost","root","rootPass.123","banco")
 cursor = db.cursor()
@@ -78,6 +79,10 @@ class Ui_mainWindow(object):
             cursor.execute(sql)
             cursor.fetchone()
             print(var)
+            f = open("log.txt", "a")
+            f.write("   TRANSACCIÓN LECTURA NO COMPROMETIDA INICIALIZADA \n")
+            f.write("       " + time.strftime("%c") + "\n")
+            f.close
         elif var == 'Lectura Confirmada':
             sql = "set transaction isolation level READ COMMITTED;"
             cursor.execute(sql)
@@ -86,6 +91,10 @@ class Ui_mainWindow(object):
             cursor.execute(sql)
             cursor.fetchone()
             print(var)
+            f = open("log.txt", "a")
+            f.write("   TRANSACCIÓN LECTURA COMPROMETIDA INICIALIZADA \n")
+            f.write("       " + time.strftime("%c") + "\n")
+            f.close
         elif var == 'Lectura Repetible':
             sql = "set transaction isolation level REPEATABLE READ;"
             cursor.execute(sql)
@@ -94,6 +103,10 @@ class Ui_mainWindow(object):
             cursor.execute(sql)
             cursor.fetchone()
             print(var)
+            f = open("log.txt", "a")
+            f.write("   TRANSACCIÓN LECTURA REPETIBLE INICIALIZADA \n")
+            f.write("       " + time.strftime("%c") + "\n")
+            f.close
         elif var == 'Serializable':
             sql = "set transaction isolation level SERIALIZABLE;"
             cursor.execute(sql)
@@ -102,6 +115,10 @@ class Ui_mainWindow(object):
             cursor.execute(sql)
             cursor.fetchone()
             print(var)
+            f = open("log.txt", "a")
+            f.write("   TRANSACCIÓN SERIALIZABLE INICIALIZADA \n")
+            f.write("       " + time.strftime("%c") + "\n")
+            f.close
     
     def consulta(self):
         global accion

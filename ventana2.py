@@ -1,4 +1,5 @@
 import pymysql
+import time
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 cursor = None
@@ -131,6 +132,10 @@ class Ui_Dialog(object):
         cursor.execute(sql)
         data = cursor.fetchone()
         self.txtSaldo.setText(str(data[0]))
+        f = open("log.txt", "a")
+        f.write("       TRANSACCIÓN PARCILAMENTE COMPROMETIDA \n")
+        f.write("           " + time.strftime("%c") + "\n")
+        f.close
         
     def disminuir(self):
         global dinero
@@ -144,13 +149,25 @@ class Ui_Dialog(object):
         cursor.execute(sql)
         data = cursor.fetchone()
         self.txtSaldo.setText(str(data[0]))
+        f = open("log.txt", "a")
+        f.write("       TRANSACCIÓN PARCILAMENTE COMPROMETIDA \n")
+        f.write("           " + time.strftime("%c") + "\n")
+        f.close
         
     def commit(self):
         sql = "commit;"
         cursor.execute(sql)
         print('Transacción ejecutada correctamente')
+        f = open("log.txt", "a")
+        f.write("       TRANSACCIÓN COMPROMETIDA \n")
+        f.write("           " + time.strftime("%c") + "\n")
+        f.close
         
     def rollback(self):
         sql = "rollback;"
         cursor.execute(sql)
         print('Transacción cancelada')
+        f = open("log.txt", "a")
+        f.write("       TRANSACCIÓN ABORTADA \n")
+        f.write("           " + time.strftime("%c") + "\n")
+        f.close

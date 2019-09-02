@@ -11,13 +11,13 @@ accion = 'prueba'
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
-        mainWindow.resize(215, 233)
+        mainWindow.resize(217, 284)
         mainWindow.setTabShape(QtWidgets.QTabWidget.Rounded)
         self.centralwidget = QtWidgets.QWidget(mainWindow)
         self.centralwidget.setObjectName("centralwidget")
         #comboBox
         self.cBox = QtWidgets.QComboBox(self.centralwidget)
-        self.cBox.setGeometry(QtCore.QRect(10, 10, 79, 23))
+        self.cBox.setGeometry(QtCore.QRect(10, 10, 161, 23))
         self.cBox.setEditable(False)
         self.cBox.setObjectName("cBox")
         self.cBox.addItem("Lectura no Confirmada")
@@ -53,6 +53,16 @@ class Ui_mainWindow(object):
         self.btnCajero.clicked.connect(self.nivelAislamiento)
         self.btnCajero.clicked.connect(self.cajero)
 
+        #boton export
+        self.btnExport = QtWidgets.QPushButton(self.centralwidget)
+        self.btnExport.setGeometry(QtCore.QRect(10, 230, 80, 23))
+        self.btnExport.setObjectName("btnExport")
+        
+        #boton import
+        self.btnImport = QtWidgets.QPushButton(self.centralwidget)
+        self.btnImport.setGeometry(QtCore.QRect(130, 230, 80, 23))
+        self.btnImport.setObjectName("btnImport")
+        
         mainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(mainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -68,6 +78,8 @@ class Ui_mainWindow(object):
         self.btnDeposito.setText(_translate("mainWindow", "Depósito"))
         self.btnRetiro.setText(_translate("mainWindow", "Retiro"))
         self.btnCajero.setText(_translate("mainWindow", "Cajero"))
+        self.btnExport.setText(_translate("mainWindow", "Export"))
+        self.btnImport.setText(_translate("mainWindow", "Import"))
         
     def nivelAislamiento(self):
         var = str(self.cBox.currentText())

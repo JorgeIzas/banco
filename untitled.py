@@ -3,8 +3,9 @@ from ventana2 import Ui_Dialog
 from PyQt5.QtWidgets import QApplication, QMainWindow
 import pymysql
 import time
+from subprocess import Popen
 
-db = pymysql.connect("localhost","root","rootPass.123","banco")
+db = pymysql.connect("localhost","root","gameBoy_444","banco")
 cursor = db.cursor()
 accion = 'prueba'
 
@@ -57,11 +58,13 @@ class Ui_mainWindow(object):
         self.btnExport = QtWidgets.QPushButton(self.centralwidget)
         self.btnExport.setGeometry(QtCore.QRect(10, 230, 80, 23))
         self.btnExport.setObjectName("btnExport")
+        self.btnExport.clicked.connect(self.exportar)
         
         #boton import
         self.btnImport = QtWidgets.QPushButton(self.centralwidget)
         self.btnImport.setGeometry(QtCore.QRect(130, 230, 80, 23))
         self.btnImport.setObjectName("btnImport")
+        self.btnImport.clicked.connect(self.importar)
         
         mainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(mainWindow)
@@ -84,7 +87,7 @@ class Ui_mainWindow(object):
     def nivelAislamiento(self):
         var = str(self.cBox.currentText())
         if var == 'Lectura no Confirmada':
-            sql = "set transaction isolation level READ UNCOMMITTED;"
+            sql = "set @@session.tx_isolation = 'READ-UNCOMMITTED';"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"
@@ -96,7 +99,7 @@ class Ui_mainWindow(object):
             f.write("       " + time.strftime("%c") + "\n")
             f.close
         elif var == 'Lectura Confirmada':
-            sql = "set transaction isolation level READ COMMITTED;"
+            sql = "set @@session.tx_isolation = 'READ-COMMITTED';"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"
@@ -108,7 +111,7 @@ class Ui_mainWindow(object):
             f.write("       " + time.strftime("%c") + "\n")
             f.close
         elif var == 'Lectura Repetible':
-            sql = "set transaction isolation level REPEATABLE READ;"
+            sql = "set @@session.tx_isolation = 'REPEATABLE-READ';"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"
@@ -120,7 +123,7 @@ class Ui_mainWindow(object):
             f.write("       " + time.strftime("%c") + "\n")
             f.close
         elif var == 'Serializable':
-            sql = "set transaction isolation level SERIALIZABLE;"
+            sql = "set @@session.tx_isolation = 'SERIALIZABLE';"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"
@@ -167,3 +170,21 @@ class Ui_mainWindow(object):
         self.ui.setupUi(self.window, accion, cursor)
         self.ui
         self.window.show()
+        
+    def exportar(self):
+        Popen('mysqldump -u root -p banco2 > data-dump.sql' ,shell=True)
+        sql = "drop database banco;"
+        cursor.execute(sql)
+        cursor.fetchone()
+        sql = "CREATE DATABASE banco;"
+        cursor.execute(sql)
+        cursor.fetchone()
+        print('Exportación Exitosa')
+        
+    def importar(self):
+        Popen('mysql -u root banco < data-dump.sql', shell=True)
+        print('Importación Exitosa')
+        
+        
+        
+        

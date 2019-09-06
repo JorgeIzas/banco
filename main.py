@@ -1,4 +1,3 @@
-import pymysql
 import mysql.connector
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from untitled import Ui_mainWindow

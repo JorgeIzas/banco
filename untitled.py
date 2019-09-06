@@ -5,7 +5,7 @@ import pymysql
 import time
 from subprocess import Popen
 
-db = pymysql.connect("localhost","root","gameBoy_444","banco")
+db = pymysql.connect("localhost","root","rootPass.123","banco")
 cursor = db.cursor()
 accion = 'prueba'
 
@@ -172,17 +172,11 @@ class Ui_mainWindow(object):
         self.window.show()
         
     def exportar(self):
-        Popen('mysqldump -u root -p banco2 > data-dump.sql' ,shell=True)
-        sql = "drop database banco;"
-        cursor.execute(sql)
-        cursor.fetchone()
-        sql = "CREATE DATABASE banco;"
-        cursor.execute(sql)
-        cursor.fetchone()
+        Popen('mysqldump --user="root" --password="rootPass.123"  banco > data-dump.sql' ,shell=True)
         print('Exportación Exitosa')
         
     def importar(self):
-        Popen('mysql -u root banco < data-dump.sql', shell=True)
+        Popen('mysql --user="root" --password="rootPass.123" banco < data-dump.sql', shell=True)
         print('Importación Exitosa')
         
         

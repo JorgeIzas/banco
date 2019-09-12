@@ -10,7 +10,7 @@ NoCuenta = ''
 class Ui_Dialog(object):
     def setupUi(self, Dialog, accion, c):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(400, 214)
+        Dialog.resize(501, 317)
         global cursor
         cursor = c
         #comboBox de las cuentras creadas
@@ -27,53 +27,62 @@ class Ui_Dialog(object):
         #    self.cBox2.addItem(str(row))
         #self.cBox2.currentTextChanged.connect(self.changeAccount)
 
-        #text area para mostrar el numero de cuenta
-        self.txtCuenta = QtWidgets.QTextEdit(Dialog)
-        self.txtCuenta.setEnabled(False)
-        self.txtCuenta.setGeometry(QtCore.QRect(190, 20, 191, 31))
-        self.txtCuenta.setObjectName("txtCuenta")
 
         #text area para mostrar el saldo
         self.txtSaldo = QtWidgets.QTextEdit(Dialog)
         self.txtSaldo.setEnabled(False)
-        self.txtSaldo.setGeometry(QtCore.QRect(190, 70, 191, 31))
+        self.txtSaldo.setGeometry(QtCore.QRect(300, 100, 191, 31))
         self.txtSaldo.setObjectName("txtSaldo")
         
         #text area para buscar cuenta
         self.txtBuscar = QtWidgets.QTextEdit(Dialog)
-        self.txtBuscar.setGeometry(QtCore.QRect(10, 20, 161, 31))
+        self.txtBuscar.setGeometry(QtCore.QRect(90, 20, 171, 31))
         self.txtBuscar.setObjectName("txtBuscar")
 
+        #tabla para agregar datos
+        self.tableCuenta = QtWidgets.QTableWidget(Dialog)
+        self.tableCuenta.setGeometry(QtCore.QRect(20, 60, 261, 131))
+        self.tableCuenta.setObjectName("tableCuenta")
+        self.tableCuenta.setColumnCount(0)
+        self.tableCuenta.setRowCount(0)
         
         #labels
         self.label = QtWidgets.QLabel(Dialog)
-        self.label.setGeometry(QtCore.QRect(130, 60, 51, 51))
+        self.label.setGeometry(QtCore.QRect(380, 60, 51, 51))
         self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(Dialog)
-        self.label_2.setGeometry(QtCore.QRect(20, 130, 57, 15))
+        self.label_2.setGeometry(QtCore.QRect(40, 230, 57, 15))
         self.label_2.setObjectName("label_2")
+        self.label_3 = QtWidgets.QLabel(Dialog)
+        self.label_3.setGeometry(QtCore.QRect(30, 30, 57, 15))
+        self.label_3.setObjectName("label_3")
         
         #text area para ingresar el monto
         self.txtMonto = QtWidgets.QTextEdit(Dialog)
-        self.txtMonto.setGeometry(QtCore.QRect(70, 120, 191, 31))
+        self.txtMonto.setGeometry(QtCore.QRect(90, 220, 191, 31))
         self.txtMonto.setObjectName("txtMonto")
         
         #boton rollbakc
         self.btnCancelar = QtWidgets.QPushButton(Dialog)
-        self.btnCancelar.setGeometry(QtCore.QRect(10, 180, 80, 23))
+        self.btnCancelar.setGeometry(QtCore.QRect(300, 280, 80, 23))
         self.btnCancelar.setObjectName("btnCancelar")
         self.btnCancelar.clicked.connect(self.rollback)
         
         #boton solo para realizar la operacion
         self.btnRealizar = QtWidgets.QPushButton(Dialog)
-        self.btnRealizar.setGeometry(QtCore.QRect(270, 130, 80, 23))
+        self.btnRealizar.setGeometry(QtCore.QRect(290, 220, 80, 23))
         self.btnRealizar.setObjectName("btnRealizar")
         
         #boton para realizar commit
         self.btnAceptar = QtWidgets.QPushButton(Dialog)
-        self.btnAceptar.setGeometry(QtCore.QRect(100, 180, 80, 23))
+        self.btnAceptar.setGeometry(QtCore.QRect(400, 280, 80, 23))
         self.btnAceptar.setObjectName("btnAceptar")
         self.btnAceptar.clicked.connect(self.commit)
+        
+        #boton para buscar la cuenta
+        self.btnBuscar = QtWidgets.QPushButton(Dialog)
+        self.btnBuscar.setGeometry(QtCore.QRect(280, 20, 80, 23))
+        self.btnBuscar.setObjectName("btnBuscar")
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -105,6 +114,8 @@ class Ui_Dialog(object):
         self.btnCancelar.setText(_translate("Dialog", "Cancelar"))
         self.btnRealizar.setText(_translate("Dialog", "Realizar"))
         self.btnAceptar.setText(_translate("Dialog", "Aceptar"))
+        self.label_3.setText(_translate("Dialog", "Cuenta:"))
+        self.btnBuscar.setText(_translate("Dialog", "Buscar"))
 
     def changeAccount(self, value):
         primera = value.split(',')

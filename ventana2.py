@@ -14,18 +14,18 @@ class Ui_Dialog(object):
         global cursor
         cursor = c
         #comboBox de las cuentras creadas
-        self.cBox2 = QtWidgets.QComboBox(Dialog)
-        self.cBox2.setGeometry(QtCore.QRect(10, 20, 151, 23))
-        self.cBox2.setObjectName("cBox2")
-        """ Cambiar datos de la cuenta """
-        listaCuentas = []
-        cursor.execute("SELECT cuenta, nombre FROM cuenta")
-        data = cursor.fetchall()
-        self.cBox2.addItem('----------')
-        for row in data:
-            listaCuentas.append(row)
-            self.cBox2.addItem(str(row))
-        self.cBox2.currentTextChanged.connect(self.changeAccount)
+        #self.cBox2 = QtWidgets.QComboBox(Dialog)
+        #self.cBox2.setGeometry(QtCore.QRect(10, 20, 151, 23))
+        #self.cBox2.setObjectName("cBox2")
+        #""" Cambiar datos de la cuenta """
+        #listaCuentas = []
+        #cursor.execute("SELECT cuenta, nombre FROM cuenta")
+        #data = cursor.fetchall()
+        #self.cBox2.addItem('----------')
+        #for row in data:
+        #    listaCuentas.append(row)
+        #    self.cBox2.addItem(str(row))
+        #self.cBox2.currentTextChanged.connect(self.changeAccount)
 
         #text area para mostrar el numero de cuenta
         self.txtCuenta = QtWidgets.QTextEdit(Dialog)
@@ -38,6 +38,12 @@ class Ui_Dialog(object):
         self.txtSaldo.setEnabled(False)
         self.txtSaldo.setGeometry(QtCore.QRect(190, 70, 191, 31))
         self.txtSaldo.setObjectName("txtSaldo")
+        
+        #text area para buscar cuenta
+        self.txtBuscar = QtWidgets.QTextEdit(Dialog)
+        self.txtBuscar.setGeometry(QtCore.QRect(10, 20, 161, 31))
+        self.txtBuscar.setObjectName("txtBuscar")
+
         
         #labels
         self.label = QtWidgets.QLabel(Dialog)

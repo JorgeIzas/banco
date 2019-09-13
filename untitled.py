@@ -87,7 +87,7 @@ class Ui_mainWindow(object):
     def nivelAislamiento(self):
         var = str(self.cBox.currentText())
         if var == 'Lectura no Confirmada':
-            sql = "set @@session.tx_isolation = 'READ-UNCOMMITTED';"
+            sql = "set transaction isolation level READ UNCOMMITTED;"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"
@@ -99,7 +99,7 @@ class Ui_mainWindow(object):
             f.write("       " + time.strftime("%c") + "\n")
             f.close
         elif var == 'Lectura Confirmada':
-            sql = "set @@session.tx_isolation = 'READ-COMMITTED';"
+            sql = "set transaction isolation level READ COMMITTED;"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"
@@ -111,7 +111,7 @@ class Ui_mainWindow(object):
             f.write("       " + time.strftime("%c") + "\n")
             f.close
         elif var == 'Lectura Repetible':
-            sql = "set @@session.tx_isolation = 'REPEATABLE-READ';"
+            sql = "set transaction isolation level REPEATABLE-READ;"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"
@@ -123,7 +123,7 @@ class Ui_mainWindow(object):
             f.write("       " + time.strftime("%c") + "\n")
             f.close
         elif var == 'Serializable':
-            sql = "set @@session.tx_isolation = 'SERIALIZABLE';"
+            sql = "set transaction isolation level SERIALIZABLE;"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"

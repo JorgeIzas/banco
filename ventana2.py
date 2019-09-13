@@ -83,6 +83,7 @@ class Ui_Dialog(object):
         self.btnBuscar = QtWidgets.QPushButton(Dialog)
         self.btnBuscar.setGeometry(QtCore.QRect(280, 20, 80, 23))
         self.btnBuscar.setObjectName("btnBuscar")
+        self.btnBuscar.clicked.connect(self.buscar)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -188,3 +189,31 @@ class Ui_Dialog(object):
         f.write("       TRANSACCIÓN ABORTADA \n")
         f.write("           " + time.strftime("%c") + "\n")
         f.close
+
+    def buscar(self):
+        busqueda = self.txtBuscar.toPlainText()
+        sql = "select cuenta, nombre, saldo from cuenta where match(cuenta) against('" + busqueda + "*' in boolean mode);"
+        cursor.execute(sql)
+        data = cursor.fetchall()
+        b = 0
+        for asfd in data:
+            b+=1
+        self.tableCuenta.setColumnCount(3)
+        self.tableCuenta.setRowCount(b)
+        #Cuenta
+        a = 0
+        for row in data:
+            str1 = ''.join(row[0])
+            self.tableCuenta.setItem(a, 0, QtWidgets.QTableWidgetItem(str1))
+            a+=1
+        #Nombre
+        a = 0
+        for row in data:
+            str1 = ''.join(row[1])
+            self.tableCuenta.setItem(a, 1, QtWidgets.QTableWidgetItem(str1))
+            a+=1
+        #Saldo
+        a = 0
+        for row in data:
+            self.tableCuenta.setItem(a, 2, QtWidgets.QTableWidgetItem(str(row[2])))
+            a+=1

@@ -1,4 +1,3 @@
-import pymysql
 import time
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -14,47 +13,48 @@ class Ui_Dialog(object):
         global cursor
         cursor = c
         #comboBox de las cuentras creadas
-        #self.cBox2 = QtWidgets.QComboBox(Dialog)
-        #self.cBox2.setGeometry(QtCore.QRect(10, 20, 151, 23))
-        #self.cBox2.setObjectName("cBox2")
-        #""" Cambiar datos de la cuenta """
-        #listaCuentas = []
-        #cursor.execute("SELECT cuenta, nombre FROM cuenta")
-        #data = cursor.fetchall()
-        #self.cBox2.addItem('----------')
-        #for row in data:
-        #    listaCuentas.append(row)
-        #    self.cBox2.addItem(str(row))
-        #self.cBox2.currentTextChanged.connect(self.changeAccount)
+        self.cBox2 = QtWidgets.QComboBox(Dialog)
+        self.cBox2.setGeometry(QtCore.QRect(85, 50, 151, 23))
+        self.cBox2.setObjectName("cBox2")
+        """ Cambiar datos de la cuenta """
+        listaCuentas = []
+        cursor.execute("SELECT cuenta, nombre FROM cuenta")
+        data = cursor.fetchall()
+        self.cBox2.addItem('----------')
+        for row in data:
+            listaCuentas.append(row)
+            self.cBox2.addItem(str(row))
+        self.cBox2.currentTextChanged.connect(self.changeAccount)
 
 
         #text area para mostrar el saldo
         self.txtSaldo = QtWidgets.QTextEdit(Dialog)
         self.txtSaldo.setEnabled(False)
-        self.txtSaldo.setGeometry(QtCore.QRect(300, 100, 191, 31))
+        self.txtSaldo.setGeometry(QtCore.QRect(300, 120, 191, 31))
         self.txtSaldo.setObjectName("txtSaldo")
         
         #text area para buscar cuenta
-        self.txtBuscar = QtWidgets.QTextEdit(Dialog)
-        self.txtBuscar.setGeometry(QtCore.QRect(90, 20, 171, 31))
-        self.txtBuscar.setObjectName("txtBuscar")
-
-        #tabla para agregar datos
-        self.tableCuenta = QtWidgets.QTableWidget(Dialog)
-        self.tableCuenta.setGeometry(QtCore.QRect(20, 60, 261, 131))
-        self.tableCuenta.setObjectName("tableCuenta")
-        self.tableCuenta.setColumnCount(0)
-        self.tableCuenta.setRowCount(0)
+        self.txtCuenta = QtWidgets.QTextEdit(Dialog)
+        self.txtCuenta.setEnabled(False)
+        self.txtCuenta.setGeometry(QtCore.QRect(300, 60, 191, 31))
+        self.txtCuenta.setObjectName("txtCuenta")
+#
+#        tabla para agregar datos
+#        self.tableCuenta = QtWidgets.QTableWidget(Dialog)
+#        self.tableCuenta.setGeometry(QtCore.QRect(20, 60, 261, 131))
+#        self.tableCuenta.setObjectName("tableCuenta")
+#        self.tableCuenta.setColumnCount(0)
+#        self.tableCuenta.setRowCount(0)
         
         #labels
         self.label = QtWidgets.QLabel(Dialog)
-        self.label.setGeometry(QtCore.QRect(380, 60, 51, 51))
+        self.label.setGeometry(QtCore.QRect(380, 85, 51, 51))
         self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(Dialog)
         self.label_2.setGeometry(QtCore.QRect(40, 230, 57, 15))
         self.label_2.setObjectName("label_2")
         self.label_3 = QtWidgets.QLabel(Dialog)
-        self.label_3.setGeometry(QtCore.QRect(30, 30, 57, 15))
+        self.label_3.setGeometry(QtCore.QRect(380, 35, 57, 15))
         self.label_3.setObjectName("label_3")
         
         #text area para ingresar el monto
@@ -79,11 +79,11 @@ class Ui_Dialog(object):
         self.btnAceptar.setObjectName("btnAceptar")
         self.btnAceptar.clicked.connect(self.commit)
         
-        #boton para buscar la cuenta
-        self.btnBuscar = QtWidgets.QPushButton(Dialog)
-        self.btnBuscar.setGeometry(QtCore.QRect(280, 20, 80, 23))
-        self.btnBuscar.setObjectName("btnBuscar")
-        self.btnBuscar.clicked.connect(self.buscar)
+#        boton para buscar la cuenta
+#        self.btnBuscar = QtWidgets.QPushButton(Dialog)
+#        self.btnBuscar.setGeometry(QtCore.QRect(280, 20, 80, 23))
+#        self.btnBuscar.setObjectName("btnBuscar")
+#        self.btnBuscar.clicked.connect(self.buscar)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -116,7 +116,7 @@ class Ui_Dialog(object):
         self.btnRealizar.setText(_translate("Dialog", "Realizar"))
         self.btnAceptar.setText(_translate("Dialog", "Aceptar"))
         self.label_3.setText(_translate("Dialog", "Cuenta:"))
-        self.btnBuscar.setText(_translate("Dialog", "Buscar"))
+        #self.btnBuscar.setText(_translate("Dialog", "Buscar"))
 
     def changeAccount(self, value):
         primera = value.split(',')
@@ -141,12 +141,13 @@ class Ui_Dialog(object):
     def aumentar(self):
         global dinero
         dinero = self.txtMonto.toPlainText()
+        cue = str(self.txtCuenta.toPlainText())
         self.txtSaldo.setText('')
         self.txtMonto.setText('')
-        sql = 'update cuenta set saldo = (saldo + ' + str(dinero) + ')  where id = ' + str(self.NoCuenta) +';'
+        sql = 'update cuenta set saldo = (saldo + ' + str(dinero) + ')  where cuenta = ' + cue +';'
         cursor.execute(sql)
         cursor.fetchone
-        sql = "select saldo from cuenta where id = '" + str(self.NoCuenta) + "';"
+        sql = "select saldo from cuenta where cuenta = '" + cue + "';"
         cursor.execute(sql)
         data = cursor.fetchone()
         self.txtSaldo.setText(str(data[0]))
@@ -158,12 +159,13 @@ class Ui_Dialog(object):
     def disminuir(self):
         global dinero
         dinero = self.txtMonto.toPlainText()
+        cue = str(self.txtCuenta.toPlainText())
         self.txtSaldo.setText('')
         self.txtMonto.setText('')
-        sql = 'update cuenta set saldo = (saldo - ' + str(dinero) + ')  where id = ' + str(self.NoCuenta) +';'
+        sql = 'update cuenta set saldo = (saldo - ' + str(dinero) + ')  where cuenta = ' + cue +';'
         cursor.execute(sql)
         cursor.fetchone()
-        sql = "select saldo from cuenta where id = '" + str(self.NoCuenta) + "';"
+        sql = "select saldo from cuenta where cuenta = '" + cue + "';"
         cursor.execute(sql)
         data = cursor.fetchone()
         self.txtSaldo.setText(str(data[0]))
@@ -190,30 +192,30 @@ class Ui_Dialog(object):
         f.write("           " + time.strftime("%c") + "\n")
         f.close
 
-    def buscar(self):
-        busqueda = self.txtBuscar.toPlainText()
-        sql = "select cuenta, nombre, saldo from cuenta where match(cuenta) against('" + busqueda + "*' in boolean mode);"
-        cursor.execute(sql)
-        data = cursor.fetchall()
-        b = 0
-        for asfd in data:
-            b+=1
-        self.tableCuenta.setColumnCount(3)
-        self.tableCuenta.setRowCount(b)
-        #Cuenta
-        a = 0
-        for row in data:
-            str1 = ''.join(row[0])
-            self.tableCuenta.setItem(a, 0, QtWidgets.QTableWidgetItem(str1))
-            a+=1
-        #Nombre
-        a = 0
-        for row in data:
-            str1 = ''.join(row[1])
-            self.tableCuenta.setItem(a, 1, QtWidgets.QTableWidgetItem(str1))
-            a+=1
-        #Saldo
-        a = 0
-        for row in data:
-            self.tableCuenta.setItem(a, 2, QtWidgets.QTableWidgetItem(str(row[2])))
-            a+=1
+#    def buscar(self):
+#        busqueda = self.txtBuscar.toPlainText()
+#        sql = "select cuenta, nombre, saldo from cuenta where match(cuenta) against('" + busqueda + "*' in boolean mode);"
+#        cursor.execute(sql)
+#        data = cursor.fetchall()
+#        b = 0
+#        for asfd in data:
+#            b+=1
+#        self.tableCuenta.setColumnCount(3)
+#        self.tableCuenta.setRowCount(b)
+#        #Cuenta
+#        a = 0
+#        for row in data:
+#            str1 = ''.join(row[0])
+#            self.tableCuenta.setItem(a, 0, QtWidgets.QTableWidgetItem(str1))
+#            a+=1
+#        #Nombre
+#        a = 0
+#        for row in data:
+#            str1 = ''.join(row[1])
+#            self.tableCuenta.setItem(a, 1, QtWidgets.QTableWidgetItem(str1))
+#            a+=1
+#        #Saldo
+#        a = 0
+#        for row in data:
+#            self.tableCuenta.setItem(a, 2, QtWidgets.QTableWidgetItem(str(row[2])))
+#            a+=1

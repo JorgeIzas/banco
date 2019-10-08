@@ -12,7 +12,7 @@ accion = 'prueba'
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
-        mainWindow.resize(217, 284)
+        mainWindow.resize(217, 320)
         mainWindow.setTabShape(QtWidgets.QTabWidget.Rounded)
         self.centralwidget = QtWidgets.QWidget(mainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -57,14 +57,22 @@ class Ui_mainWindow(object):
         #boton export
         self.btnExport = QtWidgets.QPushButton(self.centralwidget)
         self.btnExport.setGeometry(QtCore.QRect(10, 230, 80, 23))
+        self.btnExport.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btnExport.setObjectName("btnExport")
         self.btnExport.clicked.connect(self.exportar)
         
         #boton import
         self.btnImport = QtWidgets.QPushButton(self.centralwidget)
         self.btnImport.setGeometry(QtCore.QRect(130, 230, 80, 23))
+        self.btnImport.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btnImport.setObjectName("btnImport")
         self.btnImport.clicked.connect(self.importar)
+        
+        #boton cambiar de BD
+        self.btnCambiar = QtWidgets.QPushButton(self.centralwidget)
+        self.btnCambiar.setGeometry(QtCore.QRect(10, 270, 80, 23))
+        self.btnCambiar.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btnCambiar.setObjectName("btnCambiar")
         
         mainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(mainWindow)
@@ -83,11 +91,12 @@ class Ui_mainWindow(object):
         self.btnCajero.setText(_translate("mainWindow", "Cajero"))
         self.btnExport.setText(_translate("mainWindow", "Export"))
         self.btnImport.setText(_translate("mainWindow", "Import"))
+        self.btnCambiar.setText(_translate("mainWindow", "Cambiar BD"))
         
     def nivelAislamiento(self):
         var = str(self.cBox.currentText())
         if var == 'Lectura no Confirmada':
-            sql = "set transaction isolation level READ UNCOMMITTED;"
+            sql = "set @@session.tx_isolation = 'READ-UNCOMMITTED';"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"
@@ -99,7 +108,7 @@ class Ui_mainWindow(object):
             f.write("       " + time.strftime("%c") + "\n")
             f.close
         elif var == 'Lectura Confirmada':
-            sql = "set transaction isolation level READ COMMITTED;"
+            sql = "set @@session.tx_isolation = 'READ-COMMITTED';"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"
@@ -111,7 +120,7 @@ class Ui_mainWindow(object):
             f.write("       " + time.strftime("%c") + "\n")
             f.close
         elif var == 'Lectura Repetible':
-            sql = "set transaction isolation level REPEATABLE-READ;"
+            sql = "set @@session.tx_isolation = 'REPETABLE-READ';"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"
@@ -123,7 +132,7 @@ class Ui_mainWindow(object):
             f.write("       " + time.strftime("%c") + "\n")
             f.close
         elif var == 'Serializable':
-            sql = "set transaction isolation level SERIALIZABLE;"
+            sql = "set @@session.tx_isolation = 'SERIALIZABLE';"
             cursor.execute(sql)
             cursor.fetchone()
             sql = "begin;"
